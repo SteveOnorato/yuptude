@@ -70,6 +70,7 @@ function yte_off() {
     yti_pit.removeEventListener("click", yte_pit);
     yti_up.removeEventListener("click", yte_up);
     yti_dwn.removeEventListener("click", yte_dwn);
+    window.removeEventListener("keypress", yte_keypress_handler);
 
     ytw.parentNode.removeChild(ytw);
     yts.parentNode.removeChild(yts);
@@ -89,12 +90,10 @@ function yte_pit() {
 //Increase video playback speed up to the standard cutoff of 4.0
 yti_up.addEventListener("click", yte_up);
 function yte_up() {
-    inputval = document.getElementById("yptd-in").value;
+    inputval = dg("yptd-in").value;
     inputval = inputval ? parseFloat(inputval) : 1;
     inputval = (inputval <= 3.9 ? inputval + 0.1 : inputval);
-
-    s = dg("yptd-in").value = inputval.toFixed(1);
-    window.sessionStorage.setItem('yuptudeSpeed', s);
+    yte_setSpeed(inputval.toFixed(1));
 }
 
 //Decrease video playback speed down to the standard cutoff of 0.5
@@ -103,9 +102,12 @@ function yte_dwn() {
     inputval = dg("yptd-in").value;
     inputval = inputval ? parseFloat(inputval) : 1;
     inputval = (inputval >= 0.6 ? inputval - 0.1 : inputval);
+    yte_setSpeed(inputval.toFixed(1));
+}
 
-    s = dg("yptd-in").value = inputval.toFixed(1);
-    window.sessionStorage.setItem('yuptudeSpeed', s);
+function yte_setSpeed(speed) {
+    dg("yptd-in").value = speed;
+    window.sessionStorage.setItem('yuptudeSpeed', speed);
 }
 
 //Apply speed & pitch changes with a running internal to catch videos that are
@@ -121,4 +123,48 @@ function apply(ns) {
             v.mozPreservesPitch = v.webkitPreservesPitch = v.preservePitch = !p;
         }
     }
+}
+
+function yte_changeTime(delta_sec) {
+    videos = document.querySelectorAll("video");
+    for(var i = 0; i < videos.length; i++) {
+        v = videos[i];
+        if(v && v.readyState >= 2) {
+            v.currentTime += delta_sec;
+        }
+    }
+}
+
+function yte_togglePlayback() {
+    videos = document.querySelectorAll("video");
+    all_paused = true;
+    // Pause any videos that are playing.
+    for(var i = 0; i < videos.length; i++) {
+        v = videos[i];
+        if(v && v.readyState >= 2) {
+            if(!v.paused) {
+                all_paused = false;
+                v.pause();
+            }
+        }
+    }
+    // Only if everything was already paused, play the first video that is ready.
+    if(!was_playing) {
+        for(var i = 0; i < videos.length; i++) {
+            v = videos[i];
+            if(v && v.readyState >= 2) {
+                v.play();
+            }
+        }
+    }
+}
+
+window.addEventListener("keypress", yte_keypress_handler, false);
+function yte_keypress_handler(e) {
+  if(e.key==="f") yte_up();
+  else if(e.key==="d") yte_setSpeed(1.0);
+  else if(e.key==="s") yte_dwn();
+  else if(e.key==="w") yte_changeTime(-10.0);
+  else if(e.key==="e") yte_togglePlayback();
+  else if(e.key==="r") yte_changeTime(10.0);
 }
