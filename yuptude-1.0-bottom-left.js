@@ -93,7 +93,7 @@ function yte_up() {
     inputval = dg("yptd-in").value;
     inputval = inputval ? parseFloat(inputval) : 1;
     inputval = (inputval <= 3.9 ? inputval + 0.1 : inputval);
-    yte_setSpeed(inputval.toFixed(1));
+    yte_setSpeed(inputval);
 }
 
 //Decrease video playback speed down to the standard cutoff of 0.5
@@ -102,12 +102,13 @@ function yte_dwn() {
     inputval = dg("yptd-in").value;
     inputval = inputval ? parseFloat(inputval) : 1;
     inputval = (inputval >= 0.6 ? inputval - 0.1 : inputval);
-    yte_setSpeed(inputval.toFixed(1));
+    yte_setSpeed(inputval);
 }
 
 function yte_setSpeed(speed) {
-    dg("yptd-in").value = speed;
-    window.sessionStorage.setItem('yuptudeSpeed', speed);
+    s = speed.toFixed(1);
+    dg("yptd-in").value = s;
+    window.sessionStorage.setItem('yuptudeSpeed', s);
 }
 
 //Apply speed & pitch changes with a running internal to catch videos that are
@@ -149,7 +150,7 @@ function yte_togglePlayback() {
         }
     }
     // Only if everything was already paused, play the first video that is ready.
-    if(!was_playing) {
+    if(all_paused) {
         for(var i = 0; i < videos.length; i++) {
             v = videos[i];
             if(v && v.readyState >= 2) {
