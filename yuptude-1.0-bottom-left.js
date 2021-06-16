@@ -162,10 +162,10 @@ function yte_togglePlayback() {
 
 window.addEventListener("keypress", yte_keypress_handler, false);
 function yte_keypress_handler(e) {
-  if(e.key==="f") yte_up();
-  else if(e.key==="d") yte_setSpeed(1.0);
-  else if(e.key==="s") yte_dwn();
-  else if(e.key==="w") yte_changeTime(-10.0);
-  else if(e.key==="e") yte_togglePlayback();
-  else if(e.key==="r") yte_changeTime(10.0);
+  if(e.key==="d") yte_up();
+  else if(e.key==="s") yte_setSpeed(1.0);
+  else if(e.key==="a") yte_dwn();
+  else if(e.key==="q") yte_changeTime(-10.0);
+  else if(e.key==="w") yte_togglePlayback();
+  else if(e.key==="e") yte_changeTime(10.0);
 }
