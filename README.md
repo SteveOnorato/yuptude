@@ -2,7 +2,7 @@
 
 A bookmarklet for controlling video playback for almost any website.
 
-My fork of yuptude (https://github.com/Pepck/yuptude), adding some features that I wanted:
+This is my fork of yuptude (https://github.com/Pepck/yuptude), adding some features that I wanted:
 * Avoid UI getting stuck on page when launched multiple times.
 * Keep speed/pitch after closing the UI.
 * Restore the previous speed/pitch to the UI when launched again.
